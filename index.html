@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NIVANT</title>
+<meta name="description" content="NIVANT shows your balance, bills and budgets on one screen. Your financial data stays on your phone.">
+<link rel="icon" href="icon.png">
+<style>
+  :root {
+    --bg: #FBFAFF; --surface: #FFFFFF; --band: #F2ECFE; --border: #E7E2F5; --text: #1C1730;
+    --muted: #615A78; --accent: #7B2FF7; --accent-ink: #FFFFFF; --accent-deep: #4C2ED9;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #14111F; --surface: #1C1830; --band: #1B1631; --border: #302A4A; --text: #F1EEFB;
+      --muted: #A79FC2; --accent: #A985FF; --accent-ink: #14111F; --accent-deep: #6B4BFF; color-scheme: dark;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text); line-height: 1.6;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  a { color: var(--accent); }
+  h1, h2, h3, p { margin: 0; }
+  .wrap { max-width: 1040px; margin: 0 auto; padding-inline: 20px; }
+
+  nav { display: flex; align-items: center; justify-content: space-between; padding-block: 18px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; letter-spacing: 0.06em; text-decoration: none; color: var(--text); }
+  .brand img { width: 34px; height: 34px; border-radius: 9px; }
+  nav a.link { text-decoration: none; font-weight: 600; font-size: 15px; }
+
+  .hero { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 40px; align-items: center; padding-block: 36px 72px; }
+  .eyebrow { color: var(--accent); font-weight: 700; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 14px; }
+  h1 { font-size: clamp(34px, 5.4vw, 54px); line-height: 1.08; letter-spacing: -0.025em; text-wrap: balance; }
+  .sub { font-size: 19px; color: var(--muted); margin-top: 18px; max-width: 46ch; }
+  .stores { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+  .btn { display: inline-block; padding: 13px 22px; border-radius: 12px; background: var(--accent); color: var(--accent-ink); font-weight: 700; text-decoration: none; }
+  .btn[aria-disabled="true"] { background: var(--band); color: var(--muted); border: 1px solid var(--border); pointer-events: none; }
+  .note { font-size: 13px; color: var(--muted); margin-top: 12px; }
+
+  /* Phone mockup: dark bezel, slim camera pill and a side button around a real app screenshot. */
+  .device { position: relative; width: min(230px, 62%); aspect-ratio: 9 / 19.2; margin-inline: auto; padding: 7px; border-radius: 38px; background: linear-gradient(145deg, #4a4560, #14101f 40%, #2b2545); box-shadow: inset 0 0 0 1.5px #5d5780, inset 0 0 0 4px #0b0814, 0 40px 60px -20px rgba(0, 0, 0, 0.55); }
+  .device img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; border-radius: 31px; background: var(--surface); }
+  .device::after { content: ""; position: absolute; inset: 0; border-radius: 38px; pointer-events: none; background: linear-gradient(115deg, rgba(255, 255, 255, 0.22), transparent 30%); }
+  .stage { display: grid; place-items: center; padding: 36px 16px; border-radius: 22px; overflow: hidden; background: linear-gradient(160deg, #7B2FF7, #3b1ea8); }
+  .stage.tilt { background: radial-gradient(circle at 50% 40%, #e9ddff, #f4efff 65%); padding: 48px 16px; }
+  .stage.tilt .device { transform: perspective(1200px) rotateY(-24deg) rotateX(8deg) rotateZ(4deg); box-shadow: inset 0 0 0 1.5px #5d5780, inset 0 0 0 4px #0b0814, 30px 40px 50px -15px rgba(76, 46, 217, 0.45), 60px 70px 80px -30px rgba(0, 0, 0, 0.25); }
+  .stage.pair { background: #f1ebff; display: flex; justify-content: center; padding-inline: 8px; }
+  .stage.pair .device { width: 42%; max-width: 150px; margin: 0; flex: none; }
+  .stage.pair .device:first-child { transform: perspective(1000px) rotateY(18deg) translateX(14%) scale(0.92); z-index: 1; }
+  .stage.pair .device:last-child { transform: perspective(1000px) rotateY(-14deg) translateX(-6%) translateY(-16px); z-index: 2; box-shadow: inset 0 0 0 1.5px #5d5780, inset 0 0 0 4px #0b0814, 24px 36px 40px -12px rgba(76, 46, 217, 0.5); }
+  .stage.small { margin-top: 16px; }
+
+  .band { background: var(--band); border-block: 1px solid var(--border); }
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 28px; padding-block: 56px; }
+  .step h3 { font-size: 18px; margin-bottom: 6px; }
+  .step p { color: var(--muted); }
+  .step b { display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); font-size: 14px; margin-bottom: 12px; }
+
+  .feature { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; padding-block: 72px; }
+  .feature.flip .copy { order: 2; }
+  .feature h2 { font-size: clamp(26px, 3.6vw, 36px); line-height: 1.15; letter-spacing: -0.02em; text-wrap: balance; }
+  .feature p { color: var(--muted); font-size: 17px; margin-top: 14px; max-width: 46ch; }
+  .feature ul { margin: 18px 0 0; padding-left: 20px; color: var(--muted); }
+  .feature li { margin-bottom: 6px; }
+
+  .more { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; padding-block: 8px 72px; }
+  .more details.acc { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 18px; }
+  .more h3 { font-size: 16px; margin-bottom: 4px; }
+  .more details.acc > summary { padding: 0; }
+  .more p { color: var(--muted); font-size: 15px; }
+  h2.center { text-align: center; font-size: clamp(24px, 3.4vw, 32px); letter-spacing: -0.02em; margin-bottom: 26px; }
+
+  .faq { max-width: 720px; margin: 0 auto; padding-block: 56px 72px; }
+  details { border-bottom: 1px solid var(--border); padding-block: 16px; }
+  summary { cursor: pointer; font-weight: 700; }
+  details p { color: var(--muted); margin-top: 8px; }
+
+  .cta { text-align: center; padding-block: 64px; }
+  .cta h2 { font-size: clamp(26px, 4vw, 38px); letter-spacing: -0.02em; text-wrap: balance; }
+  .cta .stores { justify-content: center; }
+
+  footer { border-top: 1px solid var(--border); padding-block: 26px 40px; color: var(--muted); font-size: 14px; display: flex; flex-wrap: wrap; gap: 8px 22px; justify-content: space-between; }
+
+  @media (max-width: 760px) {
+    .hero, .feature { grid-template-columns: 1fr; gap: 32px; padding-block: 36px; }
+    .feature.flip .copy { order: 0; }
+    .hero { padding-bottom: 48px; }
+  }
+  /* Accordion: on phones every feature is a collapsed heading and opening one closes the others.
+     On wider screens it's all open and the headings aren't clickable. */
+  details.acc > summary { list-style: none; }
+  details.acc > summary::-webkit-details-marker { display: none; }
+  .acc-sum { display: none; }
+  @media (min-width: 761px) {
+    details.acc > summary { pointer-events: none; cursor: default; }
+  }
+  @media (max-width: 760px) {
+    .features-list { border-top: 1px solid var(--border); margin-bottom: 40px; }
+    details.acc { border-bottom: 1px solid var(--border); }
+    details.acc > summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 2px; cursor: pointer; font-weight: 700; font-size: 18px; }
+    details.acc > summary::after { content: ""; flex: none; width: 10px; height: 10px; border-right: 2px solid var(--accent); border-bottom: 2px solid var(--accent); transform: rotate(45deg); transition: transform .2s; }
+    details.acc[open] > summary::after { transform: rotate(-135deg); }
+    details.acc > summary:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+    .feature h2.desktop-only { display: none; }
+    .feature { padding-block: 4px 24px; }
+    .more { display: block; padding: 0; }
+    .more details.acc { background: none; border: 0; border-bottom: 1px solid var(--border); border-radius: 0; padding: 0; }
+    .more details.acc > summary { padding: 16px 2px; }
+    .more details.acc > summary h3 { font-size: 18px; margin: 0; }
+    .more details.acc > p { padding: 0 2px 4px; }
+    .more details.acc > .stage { margin-bottom: 24px; }
+    h2.center.more-title { display: none; }
+  }
+
+  /* "Details" cards: every phone is the same size; each card gets its own colour and angle. */
+  .more { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .more details.acc { display: flex; flex-direction: column; gap: 6px; }
+  @media (min-width: 761px) { .more details.acc > p { min-height: 6.4em; } }
+  .more .stage.small { width: 100%; height: 350px; margin-top: 14px; padding: 0; position: relative; display: block; overflow: hidden; border-radius: 18px; }
+  .more .stage.small .device { position: absolute; left: 50%; top: 22px; width: 150px; height: 325px; aspect-ratio: auto; margin: 0; padding: 6px; border-radius: 30px; --tilt: rotate(0deg); transform: translateX(-50%) var(--tilt); }
+  .more .stage.small .device::after { border-radius: 30px; }
+  .more .stage.small .device img { border-radius: 24px; }
+  .more .stage.small.pair .device { width: 130px; height: 281px; }
+  .more .stage.small.pair .device:first-child { left: 29%; top: 40px; --tilt: rotate(-4deg); z-index: 1; }
+  .more .stage.small.pair .device:last-child { left: 71%; top: 22px; --tilt: rotate(4deg); z-index: 2; }
+  .more details.acc:nth-of-type(1) .stage { background: linear-gradient(160deg, #7B2FF7, #3b1ea8); }
+  .more details.acc:nth-of-type(1) .device { --tilt: rotate(0deg); }
+  .more details.acc:nth-of-type(2) .stage { background: linear-gradient(160deg, #19c3b0, #0a6a78); }
+  .more details.acc:nth-of-type(2) .device { top: 50px; --tilt: rotate(-4deg); }
+  .more details.acc:nth-of-type(3) .stage { background: linear-gradient(160deg, #ffae5c, #e0445c); }
+  .more details.acc:nth-of-type(3) .device { top: 22px; --tilt: rotate(4deg); }
+  .more details.acc:nth-of-type(4) .stage { background: linear-gradient(160deg, #26356f, #0b1030); }
+  .more details.acc:nth-of-type(4) .device { top: 50px; --tilt: rotate(0deg); }
+  .more details.acc:nth-of-type(5) .stage { background: linear-gradient(160deg, #3fd18a, #11704f); }
+  .more details.acc:nth-of-type(5) .device { --tilt: rotate(-3deg); }
+  .more details.acc:nth-of-type(6) .stage { background: linear-gradient(100deg, #efe7ff 50%, #1b1433 50%); }
+  @media (max-width: 1000px) and (min-width: 761px) { .more { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 760px) { .more .stage.small { height: 360px; } }
+  @media (prefers-reduced-motion: reduce) { details.acc > summary::after { transition: none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav>
+    <a class="brand" href="./"><img src="icon.png" alt="" width="34" height="34">NIVANT</a>
+    <a class="link" href="privacy.html">Privacy</a>
+  </nav>
+
+  <section class="hero">
+    <div>
+      <p class="eyebrow">Personal money tracker</p>
+      <h1>Your Balance, Your Bills and Your Budget on One Screen.</h1>
+      <p class="sub">Add your accounts, log what you spend or import your bank statement, and see what's actually safe to spend. Your data never leaves your phone.</p>
+      <div class="stores">
+        <!-- Replace href="#" with your Google Play closed-testing link, remove aria-disabled, and change the text to "Join the Android test". -->
+        <a class="btn" href="#" aria-disabled="true">Android: coming soon</a>
+        <!-- Replace href="#" with your TestFlight public link, remove aria-disabled, and change the text to "Join the iPhone test". -->
+        <a class="btn" href="#" aria-disabled="true">iPhone: coming soon</a>
+      </div>
+      <p class="note">Currently in private testing.</p>
+    </div>
+    <div class="stage tilt"><div class="device"><img src="img/money.jpg" alt="The NIVANT Money screen showing a balance chart, safe-to-spend figure and upcoming bills" width="750" height="1624"></div></div>
+  </section>
+</div>
+
+<div class="band">
+  <div class="wrap steps">
+    <div class="step"><b>1</b><h3>Add Your Accounts</h3><p>Current account, savings, credit cards. Say what each holds and from which date.</p></div>
+    <div class="step"><b>2</b><h3>Log or Import</h3><p>Add a payment in a few taps, or bring in a CSV from your bank in one go.</p></div>
+    <div class="step"><b>3</b><h3>See the Month</h3><p>Balance over time, what's coming up, and how you're doing against your budgets.</p></div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="features-list">
+  <details class="acc" open>
+  <summary class="acc-sum">Safe to Spend</summary>
+  <section class="feature">
+    <div class="copy">
+      <h2 class="desktop-only">Know What's Safe to Spend, Not Just What's in the Bank.</h2>
+      <p>NIVANT takes your balance and subtracts the bills still to come before your next pay day, so the number you see is the number you can actually use.</p>
+      <ul>
+        <li>Drag along the chart to see your balance on any date</li>
+        <li>Recurring bills and income, with reminders before they're due</li>
+        <li>Pick which accounts count with a tap</li>
+      </ul>
+    </div>
+    <div class="stage"><div class="device"><img src="img/money.jpg" alt="Balance chart and recent transactions" width="750" height="1624" loading="lazy"></div></div>
+  </section>
+  </details>
+
+  <details class="acc" open>
+  <summary class="acc-sum">Budgets</summary>
+  <section class="feature flip">
+    <div class="copy">
+      <h2 class="desktop-only">Budgets That Show the Whole Month at a Glance.</h2>
+      <p>Set a limit for each category and watch spending against income. Over-budget categories stand out before the month ends, not after.</p>
+      <ul>
+        <li>Spending against your plan, by category</li>
+        <li>Income and outgoings side by side</li>
+        <li>Move any month forward or back</li>
+      </ul>
+    </div>
+    <div class="stage"><div class="device"><img src="img/budgets.jpg" alt="Monthly budget breakdown with a spending ring and category list" width="750" height="1624" loading="lazy"></div></div>
+  </section>
+  </details>
+
+  <h2 class="center more-title">And the Details That Save Time</h2>
+  <section class="more">
+    <details class="acc" open><summary><h3>Import Your Statement</h3></summary><p>Drop in a bank CSV. Duplicates are caught, and transfers between your own accounts are spotted so they don't count as spending.</p><div class="stage small"><div class="device"><img src="img/import.jpg" alt="The import review screen flagging a duplicate and a recurring payment you already track" width="750" height="1624" loading="lazy"></div></div></details>
+    <details class="acc" open><summary><h3>Skip or Stop a Payment</h3></summary><p>Skip one bill without losing the rest, or end a subscription from a chosen date and keep the history.</p><div class="stage small"><div class="device"><img src="img/skip.jpg" alt="Choices to skip one payment, stop from a date, or delete everything" width="750" height="1624" loading="lazy"></div></div></details>
+    <details class="acc" open><summary><h3>Any Currency</h3></summary><p>Keep accounts in different currencies and see one total in your own.</p><div class="stage small"><div class="device"><img src="img/currency.jpg" alt="Accounts in pounds, euros and dollars" width="750" height="1624" loading="lazy"></div></div></details>
+    <details class="acc" open><summary><h3>Lock It</h3></summary><p>Protect the app with Face ID, your fingerprint or your passcode.</p><div class="stage small"><div class="device"><img src="img/lock.jpg" alt="Settings screen with the app lock option" width="750" height="1624" loading="lazy"></div></div></details>
+    <details class="acc" open><summary><h3>Back Up and Restore</h3></summary><p>Export everything to a file and restore it on a new phone.</p><div class="stage small"><div class="device"><img src="img/backup.jpg" alt="Backup and restore options, with payment reminders above" width="750" height="1624" loading="lazy"></div></div></details>
+    <details class="acc" open><summary><h3>Light and Dark Mode</h3></summary><p>Follows your phone's setting, or choose your own.</p><div class="stage pair small"><div class="device"><img src="img/money.jpg" alt="The Money screen in light mode" width="750" height="1624" loading="lazy"></div><div class="device"><img src="img/dark.jpg" alt="The Money screen in dark mode" width="750" height="1624" loading="lazy"></div></div></details>
+  </section>
+  </div>
+
+  <section class="faq">
+    <h2 class="center">Questions</h2>
+    <details name="faq"><summary>Does NIVANT Connect to My Bank?</summary><p>No. You add transactions yourself or import a statement file you export from your bank. NIVANT never asks for your bank login.</p></details>
+    <details name="faq"><summary>Where Is My Data Stored?</summary><p>On your phone. Your accounts, transactions and budgets are never sent to us. The only things that go online are feedback you send, crash reports and your notification token. The <a href="privacy.html">privacy policy</a> lists them all.</p></details>
+    <details name="faq"><summary>What Happens If I Change Phone?</summary><p>Export a backup from Settings and restore it on the new phone.</p></details>
+    <details name="faq"><summary>How Do I Report a Problem or Suggest Something?</summary><p>Use the Feedback screen in the app. You'll see replies there, and get a notification when there's one.</p></details>
+  </section>
+
+  <section class="cta">
+    <h2>Try NIVANT While It's in Testing.</h2>
+    <div class="stores">
+      <a class="btn" href="#" aria-disabled="true">Android: coming soon</a>
+      <a class="btn" href="#" aria-disabled="true">iPhone: coming soon</a>
+    </div>
+  </section>
+
+  <footer>
+    <span>&copy; 2026 JCS Studios</span>
+    <span><a href="privacy.html">Privacy policy</a></span>
+  </footer>
+</div>
+<script>
+  (function () {
+    var mq = window.matchMedia('(max-width: 760px)');
+    var items = Array.prototype.slice.call(document.querySelectorAll('details.acc'));
+    function apply() { items.forEach(function (d) { d.open = !mq.matches; }); }
+    items.forEach(function (d) {
+      d.addEventListener('toggle', function () {
+        if (!mq.matches && !d.open) { d.open = true; return; }
+        if (mq.matches && d.open) items.forEach(function (o) { if (o !== d) o.open = false; });
+      });
+    });
+    if (mq.addEventListener) mq.addEventListener('change', apply); else mq.addListener(apply);
+    apply();
+  })();
+</script>
+</body>
+</html>

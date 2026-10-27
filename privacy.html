@@ -1,0 +1,190 @@
+<title>NIVANT Privacy Policy</title>
+<style>
+  :root {
+    --bg: #FBFAFF;
+    --surface: #FFFFFF;
+    --border: #E7E2F5;
+    --text: #1C1730;
+    --text-muted: #6B6480;
+    --accent: #7B2FF7;
+    --accent-soft: #F2ECFE;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #14111F;
+      --surface: #1C1830;
+      --border: #302A4A;
+      --text: #F1EEFB;
+      --text-muted: #A79FC2;
+      --accent: #A985FF;
+      --accent-soft: #241C3E;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #14111F;
+    --surface: #1C1830;
+    --border: #302A4A;
+    --text: #F1EEFB;
+    --text-muted: #A79FC2;
+    --accent: #A985FF;
+    --accent-soft: #241C3E;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    padding-inline: 16px;
+    padding-block: 48px 64px;
+  }
+  main {
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  .icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--accent), #4C2ED9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 700;
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+  h1 {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin: 0 0 6px;
+  }
+  .updated {
+    color: var(--text-muted);
+    font-size: 13px;
+    margin: 0 0 28px;
+  }
+  .lede {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--text);
+    margin: 0 0 32px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--border);
+  }
+  h2 {
+    font-size: 15px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--accent);
+    margin: 32px 0 12px;
+  }
+  p {
+    font-size: 15px;
+    line-height: 1.65;
+    margin: 0 0 14px;
+    color: var(--text);
+  }
+  ul {
+    margin: 0 0 14px;
+    padding-left: 0;
+    list-style: none;
+  }
+  li {
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 12px;
+    padding: 12px 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+  li strong {
+    display: block;
+    font-size: 13px;
+    color: var(--accent);
+    margin-bottom: 3px;
+  }
+  .callout {
+    background: var(--accent-soft);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px 18px;
+    margin: 0 0 8px;
+  }
+  .callout p { margin: 0; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .contact {
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    font-size: 14px;
+    color: var(--text-muted);
+  }
+  .contact a { font-weight: 600; }
+</style>
+
+<main>
+  <p><a href="./">&larr; NIVANT home</a></p>
+  <div class="icon">N</div>
+  <h1>NIVANT Privacy Policy</h1>
+  <p class="updated">Last updated 27 October 2026</p>
+
+  <p class="lede">NIVANT is a personal finance tracker for subscriptions, spending, budgets, and account balances. This page explains what data the app collects and how it's used.</p>
+
+  <h2>Financial data stays on your device</h2>
+  <div class="callout">
+    <p>Your subscriptions, transactions, budgets, accounts, and balances are stored only in local storage on your device. None of this ever leaves your device, is transmitted to us, or is stored on any server. We have no access to it and no way to see it.</p>
+  </div>
+
+  <h2>What we do collect</h2>
+  <p>The app uses a small online service (hosted with Supabase) for three things: sending feedback, receiving replies, and finding out when the app crashes. The following is collected:</p>
+  <ul>
+    <li>
+      <strong>An anonymous identifier</strong>
+      A randomly generated ID created automatically the first time you open the app, so your feedback, replies and crash reports can be linked to your install. It is not linked to your name, email, or any other personal information. There is no account or sign-in.
+    </li>
+    <li>
+      <strong>The content of any ticket you submit</strong>
+      The text you write when reporting a bug, requesting a feature, or leaving feedback, and any replies on it.
+    </li>
+    <li>
+      <strong>A push notification token</strong>
+      Used only to notify you when there's a reply or status change on a ticket you submitted. It is passed to Expo's push notification service, which relays the notification.
+    </li>
+    <li>
+      <strong>Crash reports</strong>
+      If the app hits an error, it sends the error message, technical details of where it happened, your device's operating system (iOS or Android) and the app version. Reports do not include your transactions, balances or other financial data.
+    </li>
+  </ul>
+  <p>Supabase acts purely as our data host and does not use your data for its own purposes.</p>
+
+  <h2>Exchange rates</h2>
+  <p>To convert between currencies, the app asks a public exchange-rate service (Frankfurter) for current rates. The request includes your home currency code and, as with any internet request, your IP address. No financial data is sent.</p>
+
+  <h2>What we don't do</h2>
+  <ul>
+    <li>We don't collect your name, email address, location, contacts, or any personal identifying information.</li>
+    <li>Photos you choose as a logo stay on your device. We never receive them.</li>
+    <li>If you turn on app lock, unlocking uses your phone's own Face ID, fingerprint or passcode. The app never sees your biometric data.</li>
+    <li>We don't use analytics or advertising SDKs, and we don't track you across other apps or websites.</li>
+    <li>We don't sell or share any data with third parties for their own purposes.</li>
+  </ul>
+
+  <h2>Data deletion</h2>
+  <p>Using <strong>Clear all data</strong> in Settings removes everything stored on your device. Feedback tickets and crash reports are kept on our server as a record of problems and requests. They aren't tied to your name or email. If you'd like yours disconnected from you, contact us using the details below and we'll break the link to your anonymous identifier and remove any personal details you wrote in the text. The report itself stays.</p>
+
+  <h2>Changes to this policy</h2>
+  <p>If this policy changes, the "last updated" date at the top of this page will be revised accordingly.</p>
+
+  <div class="contact">
+    Questions about this policy or your data:<br>
+    <a href="mailto:rcurrie7ni@gmail.com">rcurrie7ni@gmail.com</a>
+  </div>
+</main>
